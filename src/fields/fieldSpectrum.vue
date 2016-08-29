@@ -1,5 +1,5 @@
 <template lang="jade">
-	input(type="text", :disabled="disabled", :placeholder="schema.placeholder")
+	input(v-validate="schema.validation",type="text", :disabled="disabled", :placeholder="schema.placeholder")
 </template>
 
 <script>

@@ -28,20 +28,6 @@ function createFormGenerator(schema = {}, model = null, options = {}, multiple =
 
 describe("VueFormGenerator.vue", () => {
 
-	describe("with empty schema", () => {
-		let schema = {};
-
-		beforeEach( () => {
-			createFormGenerator(schema);
-		});
-
-		it("should be create fieldset", () => {
-			expect(vm.$el).to.be.exist;
-			expect(el.getElementsByTagName("fieldset")).to.be.length(1);
-		});
-
-	});
-
 	describe("check form-group classes", () => {
 		let group;
 		let schema = {

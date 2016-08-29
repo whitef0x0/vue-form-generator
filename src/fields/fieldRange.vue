@@ -1,6 +1,6 @@
 <template lang="jade">
 	.wrapper
-		input.form-control(type="range", v-model="value", :min="schema.min", :max="schema.max", :disabled="disabled", :placeholder="schema.placeholder")
+		input.form-control(:field="schema.model",v-validate="schema.validation",type="range", v-model="value", :min="schema.min", :max="schema.max", :disabled="disabled", :placeholder="schema.placeholder")
 		.helpText {{ value }}
 </template>
 

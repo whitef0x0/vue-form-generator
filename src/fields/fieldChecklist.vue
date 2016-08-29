@@ -3,7 +3,7 @@
 		.listbox.form-control(v-if="schema.listBox")
 			.list-row(v-for="item in items")
 				label
-					input(type="checkbox", :checked="getItemIsChecked(item)", @change="onChanged($event, item)")
+					input(v-validate="schema.validation",type="checkbox", :checked="getItemIsChecked(item)", @change="onChanged($event, item)")
 					| {{ getItemName(item) }}
 
 		.combobox.form-control(v-if="!schema.listBox")
@@ -14,7 +14,7 @@
 			.dropList
 				.list-row(v-if="comboExpanded", v-for="item in items")
 					label
-						input(type="checkbox", :checked="getItemIsChecked(item)", @change="onChanged($event, item)")
+						input(v-validate="schema.validation",type="checkbox", :checked="getItemIsChecked(item)", @change="onChanged($event, item)")
 						| {{ getItemName(item) }}
 </template>
 

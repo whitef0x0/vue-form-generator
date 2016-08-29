@@ -1,5 +1,6 @@
 <template lang="jade">
-	input.form-control(type="text", v-model="value", :readonly="schema.readonly", :disabled="disabled", :placeholder="schema.placeholder", debounce="500", @focus="geolocate()")
+	validator(name="validator")
+	    input.form-control(:field="schema.model",v-validate="schema.validation",type="text", v-model="value", :readonly="schema.readonly", :disabled="disabled", :placeholder="schema.placeholder", debounce="500", @focus="geolocate()")
 </template>
 
 <script>

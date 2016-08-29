@@ -1,5 +1,5 @@
 <template lang="jade">
-	input(type="submit", :value="schema.buttonText", @click="click")
+	input(v-validate="schema.validation",type="submit", :value="schema.buttonText", @click="click")
 </template>
 
 <script>

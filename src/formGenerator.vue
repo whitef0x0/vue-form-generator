@@ -1,14 +1,13 @@
 <template lang="jade">
 .form-group.input-field(v-for="field in fields", v-if="fieldVisible(field)", :class="getFieldRowClasses(field)")
-    h5.secondary-title {{ field.label }}
-    .field-wrap
-        validator(name="validator")
-            component(:is="getFieldType(field)", :disabled="fieldDisabled(field)", :model.sync="model", :schema.sync="field")
-            .buttons(v-if="field.buttons && field.buttons.length > 0")
-                button(v-for="btn in field.buttons", @click="btn.onclick(model, field)", :class="btn.classes") {{ btn.label }}
-    .hint(v-if="field.hint") {{ field.hint }}
-    .errors(v-if="field.errors && field.errors.length > 0")
-        span(v-for="error in field.errors", track-by="$index") {{ error }}
+	h5.secondary-title {{ field.label }}
+	.field-wrap
+		component(:is="getFieldType(field)", :disabled="fieldDisabled(field)", :model.sync="model", :schema.sync="field")
+		.buttons(v-if="field.buttons && field.buttons.length > 0")
+			button(v-for="btn in field.buttons", @click="btn.onclick(model, field)", :class="btn.classes") {{ btn.label }}
+	.hint(v-if="field.hint") {{ field.hint }}
+	.errors(v-if="field.errors && field.errors.length > 0")
+		span(v-for="error in field.errors", track-by="$index") {{ error }}
 </template>
 
 <script>
@@ -55,28 +54,6 @@
 				return res;
 			}
 		},
-
-		watch: {
-			// new model loaded
-			model: function(newModel, oldModel) {
-				if (oldModel == newModel) // model got a new property
-					return;
-
-				//console.log("Model changed!");
-				if (this.options.validateAfterLoad === true && this.isNewModel !== true)
-					this.validate();
-				else
-					this.clearValidationErrors();
-			}
-		},
-
-		compiled() {
-			// First load
-			if (this.options && this.options.validateAfterLoad === true && this.isNewModel !== true)
-				this.validate();
-			else
-				this.clearValidationErrors();
-		},
 	
 		methods: {
 			getFieldRowClasses(field) {
@@ -122,33 +99,6 @@
 					return true;
 
 				return field.visible;
-			},		
-
-			validate() {
-				this.clearValidationErrors();
-
-				each(this.$children, (child) => {
-					if (isFunction(child.validate))
-					{
-						let err = child.validate();
-						each(err, (err) => {
-							this.errors.push({
-								field: child.schema,
-								error: err
-							});
-						});
-					}
-				});
-
-				return this.errors.length == 0;
-			},
-
-			clearValidationErrors() {
-				this.errors.splice(0);
-
-				each(this.$children, (child) => {
-					child.clearValidationErrors();
-				});				
 			}
 		}
 	};
@@ -156,190 +106,5 @@
 </script>
 
 <style lang="sass">
-	
-	$errorColor: lighten(#F00, 0%);
 
-	fieldset.vue-form-generator {
-		
-		.form-control {
-			// Default Bootstrap .form-control style
-			display: block;
-			width: 100%;
-			padding: 6px 12px;
-			font-size: 14px;
-			line-height: 1.42857143;
-			color: #555;
-			background-color: #fff;
-			background-image: none;
-			border: none;
-			border-radius: 4px;
-			box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-			transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;	
-		}
-		
-		span.help {
-			margin-left: 0.3em;
-			position: relative;
-
-			.helpText {
-				background-color: #444;
-				bottom: 30px;
-				color: #fff;
-				display: block;
-				left: 0px;
-				//margin-bottom: 15px;
-				opacity: 0;
-				padding: 20px;
-				pointer-events: none;
-				position: absolute;
-				text-align: justify;
-				width: 300px;
-				//transform: translateY(10%);
-				transition: all .25s ease-out;
-				box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
-				border-radius: 6px;
-
-				a {
-					font-weight: bold;
-					text-decoration: underline;
-				}
-			}
-
-			/* This bridges the gap so you can mouse into the tooltip without it disappearing */
-			.helpText:before {
-				bottom: -20px;
-				content: " ";
-				display: block;
-				height: 20px;
-				left: 0;
-				position: absolute;
-				width: 100%;
-			}  
-
-			&:hover .helpText {
-				opacity: 1;
-				pointer-events: auto;
-				transform: translateY(0px);
-			}					
-		} // span.help
-
-		.field-wrap {
-			display: flex;
-
-			.buttons {
-				white-space: nowrap;
-				margin-left: 4px;
-			}
-
-			button, input[type=submit] {					
-				// Default Bootstrap button style
-				display: inline-block;
-				padding: 6px 12px;
-				margin: 0px;					
-				font-size: 14px;
-				font-weight: normal;
-				line-height: 1.42857143;
-				text-align: center;
-				white-space: nowrap;
-				vertical-align: middle;
-				touch-action: manipulation;
-				cursor: pointer;
-				user-select: none;
-				color: #333;
-				background-color: #fff;
-				border: none;
-				border-radius: 4px;
-
-				&:not(:last-child) {
-					margin-right: 4px;
-				}
-
-				&:hover {
-					color: #333;
-					background-color: #e6e6e6;
-					border-color: #adadad;
-				}
-
-				&:active {
-					color: #333;
-					background-color: #d4d4d4;
-					border-color: #8c8c8c;
-					outline: 0;
-					box-shadow: inset 0 3px 5px rgba(0, 0, 0, .125);
-				}
-			}
-		}		
-
-		.hint {
-			font-style: italic;
-			font-size: 0.8em;
-		}
-
-
-		.form-group {
-			display: inline-block;
-			vertical-align: top;
-			width: 100%;
-			// margin: 0.5rem 0.26rem;
-			margin-bottom: 1rem;
-
-			label {
-				font-weight: 400;
-			}
-
-			&.featured {
-				label {
-					font-weight: bold;
-				}			
-			}
-
-			&.required {
-				label:after {
-					content: "*";
-					font-weight: normal;
-					color: Red;
-					position: absolute;
-					padding-left: 0.2em;
-					font-size: 1em;
-				}	
-			}
-
-			&.disabled {
-				label {
-					color: #666;
-					font-style: italic;
-				}			
-			}
-
-			&.error {
-
-				label {
-					//color: $errorColor;
-				}			
-
-				input:not([type="checkbox"]), textarea, select {
-					border: 1px solid $errorColor;
-					background-color: rgba($errorColor, 0.15);
-				}
-
-				.errors {
-					color: $errorColor;
-					font-size: 0.80em;
-					span {
-						display: block;
-						background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAiklEQVR4Xt2TMQoCQQxF3xdhu72MpZU3GU/meBFLOztPYrVWsQmEWSaMsIXgK8P8RyYkMjO2sAN+K9gTIAmDAlzoUzE7p4IFytvDCQWJKSStYB2efcAvqZFM0BcstMx5naSDYFzfLhh/4SmRM+6Agw/xIX0tKEDFufeDNRUc4XqLRz3qabVIf3BMHwl6Ktexn3nmAAAAAElFTkSuQmCC');
-						background-repeat: no-repeat;
-						padding-left: 17px;
-							padding-top: 0px;
-							margin-top: 0.2em;
-							font-weight: 600;
-					}
-
-				} // .errors	
-
-			} // .error
-
-		} // .form-group
-
-	} // fieldset
 </style>

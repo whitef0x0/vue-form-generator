@@ -1,6 +1,7 @@
 <template lang="jade">
 	.input-group.date
-		input.form-control(type="text", v-model="value", :disabled="disabled")
+		validator(name="validator")
+			input.form-control(:field="schema.model",v-validate="schema.validation", type="text", v-model="value", :disabled="disabled")
 		span.input-group-addon
 			span.glyphicon.glyphicon-calendar
 </template>

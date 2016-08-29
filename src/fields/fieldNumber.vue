@@ -1,5 +1,6 @@
 <template lang="jade">
-	input.form-control(type="number", v-model="value", number, :min="schema.min", :max="schema.max", :readonly="schema.readonly", :disabled="disabled", :placeholder="schema.placeholder")
+	validator(name="validator")
+	    input.form-control(:field="schema.model",v-validate="schema.validation",type="number", v-model="value", number, :min="schema.min", :max="schema.max", :readonly="schema.readonly", :disabled="disabled", :placeholder="schema.placeholder")
 </template>
 
 <script>

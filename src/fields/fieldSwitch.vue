@@ -1,6 +1,6 @@
 <template lang="jade">
 	label
-		input(type="checkbox", v-model="value", :disabled="disabled")
+		input(v-validate="schema.validation",type="checkbox", v-model="value", :disabled="disabled")
 		span.label(:data-on="schema.textOn || 'On'", :data-off="schema.textOff || 'Off'")
 		span.handle
 </template>
