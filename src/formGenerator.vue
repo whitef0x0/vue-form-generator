@@ -1,18 +1,14 @@
 <template lang="jade">
-div
-	fieldset.vue-form-generator(v-if="schema != null")
-		.form-group(v-for="field in fields", v-if="fieldVisible(field)", :class="getFieldRowClasses(field)")
-			label {{ field.label }}
-				span.help(v-if="field.help")
-					i.fa.fa-question-circle
-					.helpText {{{field.help}}}
-			.field-wrap
-				component(:is="getFieldType(field)", :disabled="fieldDisabled(field)", :model.sync="model", :schema.sync="field")
-				.buttons(v-if="field.buttons && field.buttons.length > 0")
-					button(v-for="btn in field.buttons", @click="btn.onclick(model, field)", :class="btn.classes") {{ btn.label }}
-			.hint(v-if="field.hint") {{ field.hint }}
-			.errors(v-if="field.errors && field.errors.length > 0")
-				span(v-for="error in field.errors", track-by="$index") {{ error }}
+.form-group.input-field(v-for="field in fields", v-if="fieldVisible(field)", :class="getFieldRowClasses(field)")
+    h5.secondary-title {{ field.label }}
+    .field-wrap
+        validator(name="validator")
+            component(:is="getFieldType(field)", :disabled="fieldDisabled(field)", :model.sync="model", :schema.sync="field")
+            .buttons(v-if="field.buttons && field.buttons.length > 0")
+                button(v-for="btn in field.buttons", @click="btn.onclick(model, field)", :class="btn.classes") {{ btn.label }}
+    .hint(v-if="field.hint") {{ field.hint }}
+    .errors(v-if="field.errors && field.errors.length > 0")
+        span(v-for="error in field.errors", track-by="$index") {{ error }}
 </template>
 
 <script>
@@ -164,10 +160,6 @@ div
 	$errorColor: lighten(#F00, 0%);
 
 	fieldset.vue-form-generator {
-
-		* {
-			box-sizing: border-box;
-		}		
 		
 		.form-control {
 			// Default Bootstrap .form-control style
@@ -179,7 +171,7 @@ div
 			color: #555;
 			background-color: #fff;
 			background-image: none;
-			border: 1px solid #ccc;
+			border: none;
 			border-radius: 4px;
 			box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 			transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;	
@@ -255,7 +247,7 @@ div
 				user-select: none;
 				color: #333;
 				background-color: #fff;
-				border: 1px solid #ccc;
+				border: none;
 				border-radius: 4px;
 
 				&:not(:last-child) {
